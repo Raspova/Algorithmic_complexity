@@ -1,14 +1,10 @@
-# import time
-# import matplotlib.pyplot as plt
-# from numpy.polynomial import Polynomial as P
+import time
+import numpy as np
+import matplotlib.pyplot as plt
+
 from random import shuffle
 
-
 def function_1(n: int) -> None:
-    """
-    compute the time complexity of running
-    this function as a function of n.
-    """
     temp_list = list()
     for i in range(n**2):
         temp = 0
@@ -16,72 +12,56 @@ def function_1(n: int) -> None:
             temp += j
         temp_list.append(temp)
     sum(temp_list)
-    
 
 def function_2(n: int) -> None:
-    """
-    compute the time complexity of running
-    this function as a function of n.
-
-    do not hesitate to do some reseach about the
-    complexity of the functions used and to average
-    the measured times over a number of trials if necessary.
-    """
     print(n)
     for i in range(n):
         temp_list = [j+i for j in range(n)]
         shuffle(temp_list)
         max(temp_list)
 
+# Measure the computation time for a range of n values for both functions
+n_values = np.arange(10, 100, 10)
+times_function_1 = []
+times_function_2 = []
 
-
-
-import time
-import matplotlib.pyplot as plt
-import numpy as np
-
-def measure_function_time(func, n):
+for n in n_values:
     start_time = time.time()
-    func(n)
-    return time.time() - start_time
+    function_1(n)
+    times_function_1.append(time.time() - start_time)
 
-# Measure execution times for function_1
-n_values = [20, 40, 80, 150, 300]
-times_function_1 = [measure_function_time(function_1, n) for n in n_values]
+    start_time = time.time()
+    function_2(n)
+    times_function_2.append(time.time() - start_time)
 
-# Fit a polynomial curve to the measured times
-coefficients_function_1 = np.polyfit(n_values, times_function_1, deg=4)  # degree 4 for O(n^4)
-poly_function_1 = np.poly1d(coefficients_function_1)
+# Fit polynomials to the measured times
+degree_1 = 4  # As derived, function_1 is O(n^4)
+degree_2 = 2  # As derived, function_2 is O(n^2)
 
-# Plotting
-plt.figure(figsize=(8, 6))
-plt.scatter(n_values, times_function_1, label='Measured Times')
-plt.plot(n_values, poly_function_1(n_values), label=f'Fitted Polynomial (Degree {len(coefficients_function_1)-1})', color='r')
+coeffs_1 = np.polyfit(n_values, times_function_1, degree_1)
+poly_1 = np.poly1d(coeffs_1)
+
+coeffs_2 = np.polyfit(n_values, times_function_2, degree_2)
+poly_2 = np.poly1d(coeffs_2)
+
+# Plot the measured times and the fitted polynomials
+plt.figure(figsize=(14, 6))
+
+plt.subplot(1, 2, 1)
+plt.plot(n_values, times_function_1, 'o', label='Measured times')
+plt.plot(n_values, poly_1(n_values), '-', label=f'Fitted polynomial of degree {degree_1}')
+plt.title('Function 1: Time Complexity Analysis')
 plt.xlabel('n')
-plt.ylabel('Time (seconds)')
-plt.title('Time Complexity Analysis of function_1')
+plt.ylabel('Time (s)')
 plt.legend()
-plt.grid(True)
-plt.show()
 
-print(f"Fitted Polynomial Coefficients: {coefficients_function_1}")
-
-# Measure execution times for function_2
-times_function_2 = [measure_function_time(function_2, n) for n in n_values]
-
-# Fit a polynomial curve to the measured times
-coefficients_function_2 = np.polyfit(n_values, times_function_2, deg=2)  # degree 2 for O(n^2) (since shuffle and max are O(n))
-poly_function_2 = np.poly1d(coefficients_function_2)
-
-# Plotting
-plt.figure(figsize=(8, 6))
-plt.scatter(n_values, times_function_2, label='Measured Times')
-plt.plot(n_values, poly_function_2(n_values), label=f'Fitted Polynomial (Degree {len(coefficients_function_2)-1})', color='r')
+plt.subplot(1, 2, 2)
+plt.plot(n_values, times_function_2, 'o', label='Measured times')
+plt.plot(n_values, poly_2(n_values), '-', label=f'Fitted polynomial of degree {degree_2}')
+plt.title('Function 2: Time Complexity Analysis')
 plt.xlabel('n')
-plt.ylabel('Time (seconds)')
-plt.title('Time Complexity Analysis of function_2')
+plt.ylabel('Time (s)')
 plt.legend()
-plt.grid(True)
-plt.show()
 
-print(f"Fitted Polynomial Coefficients: {coefficients_function_2}")
+plt.tight_layout()
+plt.show()
