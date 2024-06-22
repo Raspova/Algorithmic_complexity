@@ -217,7 +217,9 @@ def create_liste(mean=0, std_dev=100, n_points=100):
 #     i_min, ii_min, m_min = global_min
 #     return make_simple_route_derivitive(houses, std_dev, n_points, i_min, ii_min)
 
-def mutiple_index_route(houses : list, std_dev, n_points):
+def parcours(houses : list):
+    n_points = len(houses)
+    std_dev = np.std(houses)
     ii_values = np.arange(0.8, 1.3, 0.005)
     local_minima = []
     m_values = []
@@ -265,29 +267,29 @@ def plot_multiple_index( mean, std_dev, n_point):
     plt.show()
 
 
-if __name__ == "__main__":
-    mean = 0
-    std_dev = 500
-    n_points = 500
-    range_factor = 3
-    resolution = 1000
-    for i in range(0, 10):
-        houses = create_liste(mean, std_dev, n_points)
-        #plot_kde_and_derivative(houses, std_dev, resolution)
-        ref_route = refference(houses)
-        route_simple = make_simple_route_derivitive(houses, std_dev, n_points, 1.05)
-        route_multiple =  mutiple_index_route(houses, std_dev, n_points)
-        #if len(route) != n_points:
-        #    print( "len : ", len(route), "!= n_p ", n_points)
-        time_ref = calculate_average_time(ref_route)
-        time_simple = calculate_average_time(route_simple)
-        time_multiple = calculate_average_time(route_multiple)
-        print("ref_time: ", time_ref, "time_multiple: ", time_multiple , " diff: ", time_ref - time_multiple, " diff %: ",(time_multiple)/time_ref * 100)
-        #print("ref_time: ", time_ref, " time simple: ", time_simple, " diff: ", time_ref - time_simple, " diff %: ",
-        #      (time_simple)/time_ref * 100, "\n\t time_multiple: ", time_multiple , " diff: ", time_ref - time_multiple, " diff %: ",(time_multiple)/time_ref * 100)
-    #time_async = calculate_average_time(route_multiple_async, n_points)
-    #print("ref_time: ", ref_time, " time simple: ", time_simple, " diff: ", ref_time - time, " diff %: ",
-    #      (time)/ref_time * 100, "\n\t time_async: ", time_async , " diff: ", ref_time - time_async, " diff %: ",(time_async)/ref_time * 100)
-    #plot_multiple_index(mean, std_dev, n_points)
-    #plot_multiple_index()
+# if __name__ == "__main__":
+#     mean = 0
+#     std_dev = 500
+#     n_points = 500
+#     range_factor = 3
+#     resolution = 1000
+#     for i in range(0, 10):
+#         houses = create_liste(mean, std_dev, n_points)
+#         #plot_kde_and_derivative(houses, std_dev, resolution)
+#         ref_route = refference(houses)
+#         route_simple = make_simple_route_derivitive(houses, std_dev, n_points, 1.05)
+#         route_multiple =  parcours(houses)
+#         #if len(route) != n_points:
+#         #    print( "len : ", len(route), "!= n_p ", n_points)
+#         time_ref = calculate_average_time(ref_route)
+#         time_simple = calculate_average_time(route_simple)
+#         time_multiple = calculate_average_time(route_multiple)
+#         print("ref_time: ", time_ref, "time_multiple: ", time_multiple , " diff: ", time_ref - time_multiple, " diff %: ",(time_multiple)/time_ref * 100)
+#         #print("ref_time: ", time_ref, " time simple: ", time_simple, " diff: ", time_ref - time_simple, " diff %: ",
+#         #      (time_simple)/time_ref * 100, "\n\t time_multiple: ", time_multiple , " diff: ", time_ref - time_multiple, " diff %: ",(time_multiple)/time_ref * 100)
+#     #time_async = calculate_average_time(route_multiple_async, n_points)
+#     #print("ref_time: ", ref_time, " time simple: ", time_simple, " diff: ", ref_time - time, " diff %: ",
+#     #      (time)/ref_time * 100, "\n\t time_async: ", time_async , " diff: ", ref_time - time_async, " diff %: ",(time_async)/ref_time * 100)
+#     #plot_multiple_index(mean, std_dev, n_points)
+#     #plot_multiple_index()
     
