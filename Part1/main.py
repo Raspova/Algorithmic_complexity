@@ -94,17 +94,20 @@ def from_step_to_route(steps : list, houses :list):
     for step in steps:
         index_goal = find_closest_index(houses, step)
         goal = houses[index_goal]
-        while index > len(houses) and houses[index] != goal:
+        while index < len(houses) and houses[index] != goal:
             if houses[index] < goal:
                 route.append(houses[index])
                 # print("index: ", index, " houses[index]: ", houses[index], " c: ",c, "step " , goal)
                 c = c + 1
                 houses = np.delete(houses, index)
-                 #index = index + 1
+                if index >= len(houses):
+                    break
             else:
                 route.append(houses[index])
                 houses = np.delete(houses, index)
                 index = index - 1
+                if index < 0:
+                    break
     route.append(goal)
     return route
 
@@ -287,3 +290,5 @@ if __name__ == "__main__":
         print("ref_time: ", time_ref, "time_multiple: ", time_multiple , " diff: ", time_ref - time_multiple, " diff %: ",(time_multiple)/time_ref * 100)
         print("ref_time: ", time_ref, " time simple: ", time_simple, " diff: ", time_ref - time_simple, " diff %: ",
               (time_simple)/time_ref * 100, "\n\t time_multiple: ", time_multiple , " diff: ", time_ref - time_multiple, " diff %: ",(time_multiple)/time_ref * 100)
+    plot_multiple_index(mean, std_dev, n_points)
+    
