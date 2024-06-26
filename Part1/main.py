@@ -90,15 +90,16 @@ def from_step_to_route(steps : list, houses :list):
     index = np.argmin(np.abs(houses))
     route = [] 
     c = 0
-    #print("Steps: ", steps )
     for step in steps:
         index_goal = find_closest_index(houses, step)
         goal = houses[index_goal]
         while index < len(houses) and houses[index] != goal:
+        #    print("Index: ", index, " House: ", houses[index])
+            if index < len(houses) and index >= 0 and houses[index] == goal:
+                route.append(goal)
+                houses = np.delete(houses, index)
             if houses[index] < goal:
                 route.append(houses[index])
-                # print("index: ", index, " houses[index]: ", houses[index], " c: ",c, "step " , goal)
-                c = c + 1
                 houses = np.delete(houses, index)
                 if index >= len(houses):
                     break
@@ -108,7 +109,22 @@ def from_step_to_route(steps : list, houses :list):
                 index = index - 1
                 if index < 0:
                     break
-    route.append(goal)
+        if index < len(houses) and index >= 0 and houses[index] == goal:
+            route.append(goal)
+            houses = np.delete(houses, index)
+            if c >= (len(steps) -1):
+                break
+            if steps[c + 1] < goal and index > 0:
+                index = index - 1
+        c+=1
+    if len(houses) > 0:
+        print("Strange route building")
+        if route[-1] < houses[0]:
+            for h in  houses:
+                route.append(houses)
+        else:
+            for h in  houses[::-1] :
+                route.append(h)
     return route
 
 
