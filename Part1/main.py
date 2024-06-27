@@ -6,6 +6,7 @@ from scipy.stats import gaussian_kde
 
 def plot_kde_and_derivative(liste, std_dev, n_points):
     # Calculate the KDE
+    liste = np.sort(liste)
     kde = gaussian_kde(liste, bw_method=1)
     # Set the range for x based on the standard deviation
     range_factor = 3  # This determines how many standard deviations to consider
@@ -151,6 +152,7 @@ def make_route_derivitive_asyc_offset_simple(houses : list, std_dev, n_points, o
 def make_simple_route_derivitive(houses : list, std_dev, n_points, offset_percentage = 1):
     if len(houses) < 3:
         return "Not enough houses" 
+    houses = np.sort(houses)
     kde_derivative, kde_values, x, min_derivative_x, max_derivative_x = get_kde(houses, std_dev, n_points)
     value_max = np.max(houses)
     value_min = np.min(houses)
@@ -176,6 +178,7 @@ def refference(houses : list):
         return "Not enough houses" 
     #houses =  np.sort(houses)
     route = []
+    houses = np.sort(houses)
     i = np.argmin(np.abs(houses))    
     while len(houses) >= 3:
         if i <= 0:
@@ -215,7 +218,7 @@ def refference(houses : list):
             return route
 
 def create_liste(mean=0, std_dev=100, n_points=100):
-    liste = np.random.normal(mean, std_dev, n_points)
+    liste = np.random.normal(mean, std_dev, n_points).tolist()
     liste = np.sort(liste) 
     return liste
 
@@ -238,6 +241,7 @@ def create_liste(mean=0, std_dev=100, n_points=100):
 
 def parcours(houses : list):
     n_points = len(houses)
+    houses = np.sort(houses)
     std_dev = np.std(houses)
     ii_values = np.arange(0.8, 1.3, 0.005)
     local_minima = []
